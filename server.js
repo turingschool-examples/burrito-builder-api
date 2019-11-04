@@ -1,12 +1,14 @@
 const express = require('express');
 const app = express();
+const cors = require('cors');
 
-app.use(express.json());
 app.set('port', process.env.PORT || 3001);
+app.use(express.json());
+app.use(cors());
 
 // ingredient options: beans, steak, carnitas, sofritas, lettuce, queso fresco, pico de gallo, hot sauce, guacamole, jalapeno, cilantro, sour cream 
 
-app.locals.burritos = [
+app.locals.orders = [
   {
     id: 1,
     name: 'Pat',
@@ -19,20 +21,20 @@ app.get('/', (request, response) => {
 });
 
 
-// Get all burritos
-app.get('/api/v1/burritos', (request, response) => {
-  return response.status(200).json({ burritos: app.locals.burritos });
+// Get all orders
+app.get('/api/v1/orders', (request, response) => {
+  return response.status(200).json({ orders: app.locals.orders });
 });
 
 
-// Add a burrito
-app.post('/api/v1/burritos', (request, response) => {
-  const newBurrito = request.body;
+// Add an order
+app.post('/api/v1/orders', (request, response) => {
+  const newOrder = request.body;
   const requiredParams = ['name', 'ingredients'];
   let missingParams = [];
 
   for (let requiredProperty of requiredParams) {
-    if (newBurrito[requiredProperty] === undefined) {
+    if (newOrder[requiredProperty] === undefined) {
       missingParams = [...missingParams, requiredProperty];
     }
   }
@@ -40,26 +42,26 @@ app.post('/api/v1/burritos', (request, response) => {
   if (missingParams.length) {
     return response.status(422).send({ message: `Missing ${missingParams.join(', ')} in request.` });
   } else {
-    newBurrito.id = app.locals.burritos[app.locals.burritos.length - 1].id + 1;
-    app.locals.burritos.push(newBurrito);
-    return response.status(201).json(newBurrito);
+    newOrder.id = app.locals.orders[app.locals.orders.length - 1].id + 1;
+    app.locals.orders.push(newOrder);
+    return response.status(201).json(newOrder);
   }
 });
 
 
-// Remove a burrito
-app.delete('/api/v1/burritos/:burrito_id', (request, response) => {
-  const burritoId = parseInt(request.params.burrito_id);
+// Remove an order
+app.delete('/api/v1/orders/:order_id', (request, response) => {
+  const orderId = parseInt(request.params.order_id);
 
-  const numBurritosBeforeFilter = app.locals.burritos.length;
-  const filteredBurritos = app.locals.burritos.filter(burrito => {
-    return burritoId !== burrito.id;
+  const numOrdersBeforeFilter = app.locals.orders.length;
+  const filteredOrders = app.locals.orders.filter(order => {
+    return orderId !== order.id;
   });
   
-  if (numBurritosBeforeFilter === filteredBurritos.length) {
-    return response.status(404).json({ message: `No burrito found with id: ${burritoId}` });
+  if (numOrdersBeforeFilter === filteredOrders.length) {
+    return response.status(404).json({ message: `No order found with id: ${orderId}` });
   } else {
-    app.locals.burritos = filteredBurritos;
+    app.locals.orders = filteredOrders;
     return response.sendStatus(204);
   }
 });
