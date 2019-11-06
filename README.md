@@ -1,6 +1,6 @@
 # Burrito Builder API
 
-This API is used in conjunction with the Burrito Builder Front End. It stores burritos that people want made! Woohoo!
+This API is used in conjunction with the Burrito Builder Front End. It stores burrito orders that people want made! Woohoo!
 
 ## Setup
 
@@ -11,7 +11,7 @@ The server will run on `http://localhost:3001`. All endpoints are prefixed with 
 
 ## Data Model
 
-A burrito stored on the server has an `id`, `name`, and `ingredients`. Here is a sample burrito object:
+A order stored on the server has an `id`, `name`, and `ingredients`. Here is a sample burrito order object:
 
 ```js
 {
@@ -25,6 +25,6 @@ A burrito stored on the server has an `id`, `name`, and `ingredients`. Here is a
 
 | Purpose | URL | Verb | Request Body | Sample Success Response |
 |----|----|----|----|----|
-| Get all burritos |`/api/v1/burritos`| GET | N/A | All burritos on the server: `{burritos: [{}, {}, ...]}` |
-| Add new burrito |`/api/v1/burritos`| POST | `{name: <String>, ingredients: <Array of Strings>}` | New burrito that was added: `{id: 2, name: "Alex", ingredients: ["cheese", "beans"]}` |
-| Delete existing burrito |`/api/v1/burritos/:burrito_id`| DELETE | N/A | For successful deletion: No reponse body (only 204 status code) |
+| Get all orders |`/api/v1/orders`| GET | N/A | All orders on the server: `{orders: [{}, {}, ...]}` |
+| Add new order |`/api/v1/orders`| POST | `{name: <String>, ingredients: <Array of Strings>}` | New order that was added: `{id: 2, name: "Alex", ingredients: ["cheese", "beans"]}` |
+| Delete existing order |`/api/v1/orders/:order_id`| DELETE | N/A | For successful deletion: No response body (only 204 status code) |
