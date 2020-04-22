@@ -6,7 +6,7 @@ app.set('port', process.env.PORT || 3001);
 app.use(express.json());
 app.use(cors());
 
-// ingredient options: beans, steak, carnitas, sofritas, lettuce, queso fresco, pico de gallo, hot sauce, guacamole, jalapeno, cilantro, sour cream 
+// ingredient options: beans, steak, carnitas, sofritas, lettuce, queso fresco, pico de gallo, hot sauce, guacamole, jalapeno, cilantro, sour cream
 
 app.locals.orders = [
   {
@@ -52,7 +52,11 @@ app.post('/api/v1/orders', (request, response) => {
   if (missingParams.length) {
     return response.status(422).send({ message: `Missing ${missingParams.join(', ')} in request.` });
   } else {
-    newOrder.id = app.locals.orders[app.locals.orders.length - 1].id + 1;
+    if (app.locals.orders.length === 0) {
+      newOrder.id = 1;
+    } else {
+      newOrder.id = app.locals.orders[app.locals.orders.length - 1].id + 1;
+    }
     app.locals.orders.push(newOrder);
     return response.status(201).json(newOrder);
   }
@@ -67,7 +71,7 @@ app.delete('/api/v1/orders/:order_id', (request, response) => {
   const filteredOrders = app.locals.orders.filter(order => {
     return orderId !== order.id;
   });
-  
+
   if (numOrdersBeforeFilter === filteredOrders.length) {
     return response.status(404).json({ message: `No order found with id: ${orderId}` });
   } else {
